@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synchronicity Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style>
+        /* Custom styles for animations and UI enhancements */
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .slide-up {
+            animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-purple-900 to-black p-4 md:p-8 font-sans">
+    <div class="max-w-4xl mx-auto space-y-8">
+        <div class="text-center space-y-4">
+            <h1 class="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+                Synchronicity Tracker
+            </h1>
+            <p class="text-gray-400 text-lg md:text-xl">
+                Track number patterns, correlate with business metrics, and discover aligned resources.
+            </p>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-12 h-12 mx-auto text-yellow-400 animate-pulse">
+                <path d="M13 16.236l3.524-3.524a2.5 2.5 0 1 0-3.524-3.524L13 9.188"></path>
+                <path d="M13 7.764l-3.524 3.524a2.5 2.5 0 1 0 3.524 3.524L13 14.812"></path>
+                <path d="M7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0z"></path>
+            </svg>
+        </div>
+
+        <div class="bg-white/5 backdrop-blur-md rounded-lg border border-white/10 shadow-lg p-6 space-y-4 fade-in">
+            <h2 class="text-2xl font-semibold text-white flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-blue-400">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+                </svg>
+                Number Pattern Journal
+            </h2>
+            <p class="text-gray-400">Record the number patterns you're seeing and your associated thoughts.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="date" class="block text-sm font-medium text-gray-300 mb-1">Date</label>
+                    <input type="date" id="date" class="bg-black/20 text-white border border-purple-500/30 rounded-md px-4 py-2 w-full placeholder:text-gray-500">
+                </div>
+                <div>
+                    <label for="numbers" class="block text-sm font-medium text-gray-300 mb-1">Numbers</label>
+                    <input type="text" id="numbers" placeholder="e.g., 111, 222, 1234" class="bg-black/20 text-white border border-purple-500/30 rounded-md px-4 py-2 w-full placeholder:text-gray-500">
+                </div>
+            </div>
+            <div>
+                <label for="notes" class="block text-sm font-medium text-gray-300 mb-1">Notes</label>
+                <textarea id="notes" placeholder="Describe your thoughts, feelings, and observations..." class="bg-black/20 text-white border border-purple-500/30 rounded-md px-4 py-2 w-full placeholder:text-gray-500 min-h-[100px]"></textarea>
+            </div>
+            <button id="add-entry" class="bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600 rounded-md px-6 py-3 w-full flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                    <path d="M12 2v20M20 12H4"></path>
+                </svg>
+                Add to Journal
+            </button>
+        </div>
+
+        <div class="bg-white/5 backdrop-blur-md rounded-lg border border-white/10 shadow-lg p-6 space-y-4 fade-in">
+            <h2 class="text-2xl font-semibold text-white flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-blue-400">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+                </svg>
+                Journal Entries
+            </h2>
+            <p class="text-gray-400">Review your past entries and track your synchronicities.</p>
+            <div id="journal-entries" class="space-y-4">
+                </div>
+        </div>
+
+        <div class="bg-white/5 backdrop-blur-md rounded-lg border border-white/10 shadow-lg p-6 space-y-4 fade-in">
+            <h2 class="text-2xl font-semibold text-white flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-green-400">
+                    <path d="M14 9V5a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v4"></path>
+                    <path d="M2 17l10-10 10 10"></path>
+                    <path d="M12 7v10"></path>
+                </svg>
+                Business Metrics
+            </h2>
+            <p class="text-gray-400">Track your key business metrics and see how they align with your synchronicities.</p>
+            <div id="metrics-loading" class="flex justify-center items-center py-8 hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-blue-400 animate-spin">
+                    <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                </svg>
+            </div>
+            <div id="metrics-error" class="bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-md flex items-center gap-2 hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                    <path d="M21.73 18L13 2.97a2 2 0 0 0-3.46 0L2.27 18a2 2 0 0 0 1.73 3h16a2 2 0 0 0 1.74-3z"></path>
+                    <path d="M12 9v4"></path>
+                    <path d="M12 17h.01"></path>
+                </svg>
+                <span id="metrics-error-message"></span>
+            </div>
+            <div id="metrics-data" class="space-y-4">
+                </div>
+        </div>
+
+        <div class="bg-white/5 backdrop-blur-md rounded-lg border border-white/10 shadow-lg p-6 space-y-4 fade-in">
+            <h2 class="text-2xl font-semibold text-white flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-purple-400">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                Affiliate Offers for Spiritual Entrepreneurs
+            </h2>
+            <p class="text-gray-400">Discover resources to support your spiritual journey and business growth.</p>
+            <div id="affiliate-offer" class="text-gray-400 py-6 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 mx-auto mb-2 text-gray-500">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <path d="M3 6h18"></path>
+                    <path d="M16 10a4 4 0 1 1-8 0"></path>
+                </svg>
+                <p id="affiliate-message">
+                    No specific offer suggested for your last entry.  Record more entries to get personalized
+                    recommendations.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock Data (Replace with actual API calls)
+        const mockMetrics = [
+            { date: '2024-07-24', revenue: 1250, visitors: 320, leads: 55 },
+            { date: '2024-07-25', revenue: 1480, visitors: 380, leads: 68 },
+            { date: '2024-07-26', revenue: 1720, visitors: 450, leads: 82 },
+            { date: '2024-07-27', revenue: 1950, visitors: 510, leads: 95 },
+            { date: '2024-07-28', revenue: 2200, visitors: 580, leads: 110 },
+            { date: '2024-07-29', revenue: 2500, visitors: 650, leads: 125 },
+            { date: '2024-07-30', revenue: 2800, visitors: 720, leads: 140 },
+            { date: '2024-07-31', revenue: 3100, visitors: 800, leads: 155 },
+            { date: '2024-08-01', revenue: 3450, visitors: 880, leads: 170 },
+            { date: '2024-08-02', revenue: 3800, visitors: 960, leads: 185 },
+        ];
+
+        const mockAffiliateOffers = [
+            {
+                id: '1',
+                title: 'Manifestation Mastery Course',
+                description: 'Learn the secrets to manifesting your desires and creating your dream life.',
+                link: 'https://example.com/manifestation-course',
+                category: 'Manifestation',
+                imageUrl: 'https://placehold.co/400x200/EEE/31343C?text=Manifestation',
+            },
+            {
+                id: '2',
+                title: 'Spiritual Business Bootcamp',
+                description: 'Build a thriving business aligned with your soul purpose and attract your ideal clients.',
+                link: 'https://example.com/spiritual-business',
+                category: 'Business',
+                imageUrl: 'https://placehold.co/400x200/EEE/31343C?text=Business',
+            },
+            {
+                id: '3',
+                title: 'Chakra Healing Certification',
+                description: 'Become a certified chakra healer and help others balance their energy and well-being.',
+                link: 'https://example.com/chakra-healing',
+                category: 'Healing',
+                imageUrl: 'https://placehold.co/400x200/EEE/31343C?text=Healing',
+            },
+             {
+                id: '4',
+                title: 'Astrology Reading Course',
+                description: 'Learn to read and interpret astrological charts for yourself and others.',
+                link: 'https://example.com/astrology-reading',
+                category: 'Astrology',
+                imageUrl: 'https://placehold.co/400x200/EEE/31343C?text=Astrology'
+            },
+            {
+                id: '5',
+                title: 'Meditation Teacher Training',
+                description: 'Become a certified meditation teacher and guide others on their inner journey.',
+                link: 'https://example.com/meditation-teacher',
+                category: 'Meditation',
+                imageUrl: 'https://placehold.co/400x200/EEE/31343C?text=Meditation'
+            }
+        ];
+
+        // Helper Functions
+        const formatDate = (date) => {
+            return date.toISOString().split('T')[0];
+        };
+
+        // Get DOM Elements
+        const dateInput = document.getElementById('date');
+        const numbersInput = document.getElementById('numbers');
+        const notesInput = document.getElementById('notes');
+        const addEntryButton = document.getElementById('add-entry');
+        const journalEntriesContainer = document.getElementById('journal-entries');
+        const metricsLoadingIndicator = document.getElementById('metrics-loading');
+        const metricsErrorContainer = document.getElementById('metrics-error');
+        const metricsErrorMessage = document.getElementById('metrics-error-message');
+        const metricsDataContainer = document.getElementById('metrics-data');
+        const affiliateOfferContainer = document.getElementById('affiliate-offer');
+        const affiliateMessage = document.getElementById('affiliate-message');
+
+        // Event Listeners
+        window.addEventListener('load', () => {
+            dateInput.value = formatDate(new Date());
+            loadJournalEntries();
+            fetchMetrics();
+        });
+
+        addEntryButton.addEventListener('click', () => {
+            const date = dateInput.value;
+            const numbers = numbersInput.value;
+            const notes = notesInput.value;
+
+            if (!numbers.trim() || !notes.trim()) {
+                alert('Please fill in both numbers and notes.');
+                return;
+            }
+
+            const newEntry = {
+                id: crypto.randomUUID(),
+                date,
+                numbers,
+                notes,
+            };
+            addJournalEntry(newEntry);
+            numbersInput.value = '';
+            notesInput.value = '';
+            dateInput.value = formatDate(new Date()); // Reset to today
+        });
+
+        // Data Management
+        let journalEntries = [];
+        function loadJournalEntries() {
+            const savedEntries = localStorage.getItem('journalEntries');
+            if (savedEntries) {
+                journalEntries = JSON.parse(savedEntries);
+            }
+            displayJournalEntries();
+        }
+
+        function addJournalEntry(entry) {
+            journalEntries.push(entry);
+            localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
+            displayJournalEntries();
+             // Suggest affiliate offer on new entry
+            const suggestedOffer = suggestAffiliateOffer(entry);
+            displayAffiliateOffer(suggestedOffer);
+        }
+
+        function displayJournalEntries() {
+            journalEntriesContainer.innerHTML = ''; // Clear previous entries
+            const reversedEntries = [...journalEntries].reverse(); // Newest first
+            reversedEntries.forEach(entry => {
+                const entryDiv = document.createElement('div');
+                entryDiv.classList.add('mb-4', 'p-4', 'rounded-lg', 'bg-black/10', 'border', 'border-white/5', 'slide-up');
+
+                const correlations = findCorrelations(entry, mockMetrics); // Use mock data here
+                const entryMetrics = getMetricsForDate(entry.date);
+
+                entryDiv.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-gray-300 font-medium">${entry.date}</span>
+                        <span class="text-yellow-400 font-semibold">
+                            ${correlations.length > 0
+                                ? `${correlations.length} Correlation${correlations.length === 1 ? '' : 's'}`
+                                : 'No Correlations'
+                            }
+                        </span>
+                    </div>
+                    <p class="text-white font-mono text-lg mb-2">${entry.numbers}</p>
+                    <p class="text-gray-200 leading-relaxed mb-4">${entry.notes}</p>
+                    ${correlations.length > 0 ? `
+                        <div class="mb-4">
+                            <h4 class="text-blue-300 font-semibold mb-1">Correlations:</h4>
+                            <ul class="list-disc list-inside text-purple-300">
+                                ${correlations.map(corr => `<li>${corr}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                    ${entryMetrics ? `
+                        <div>
+                            <h4 class="text-green-300 font-semibold mb-1">Metrics for ${entry.date}:</h4>
+                            <ul class="list-disc list-inside text-gray-300">
+                                <li>Revenue: <span class="text-white">$${entryMetrics.revenue}</span></li>
+                                <li>Visitors: <span class="text-white">${entryMetrics.visitors}</span></li>
+                                <li>Leads: <span class="text-white">${entryMetrics.leads}</span></li>
+                            </ul>
+                        </div>
+                    ` : ''}
+                `;
+                journalEntriesContainer.appendChild(entryDiv);
+            });
+
+             if (journalEntries.length === 0) {
+                journalEntriesContainer.innerHTML = `
+                    <div class="text-gray-400 text-center py-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 mx-auto mb-2 text-gray-500">
+                            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+                        </svg>
+                        <p>No journal entries yet. Start recording your synchronicities!</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Metrics Functions
+        function fetchMetrics() {
+            metricsLoadingIndicator.classList.remove('hidden');
+            metricsErrorContainer.classList.add('hidden');
+            metricsErrorMessage.textContent = '';
+
+            // Simulate API call
+            setTimeout(() => {
+                try {
+                    // Replace this with your actual API call
+                    // fetch('/api/metrics')
+                    //   .then(response => response.json())
+                    //   .then(data => {
+                    //     metrics = data;
+                    //     displayMetrics();
+                    //   })
+                    //   .catch(error => {
+                    //     metricsErrorContainer.classList.remove('hidden');
+                    //     metricsErrorMessage.textContent = error.message || 'Failed to fetch metrics.';
+                    //   })
+                    //   .finally(() => {
+                    //     metricsLoadingIndicator.classList.add('hidden');
+                    //   });
+
+                    // Use mock data
+                    displayMetrics();
+                    metricsLoadingIndicator.classList.add('hidden');
+                } catch (error) {
+                    metricsErrorContainer.classList.remove('hidden');
+                    metricsErrorMessage.textContent = error.message || 'Failed to fetch metrics.';
+                    metricsLoadingIndicator.classList.add('hidden');
+                }
+            }, 1000);
+        }
+
+        function displayMetrics() {
+            metricsDataContainer.innerHTML = ''; // Clear previous data
+            const reversedMetrics = [...mockMetrics].reverse();
+            reversedMetrics.forEach(metric => {
+                const metricDiv = document.createElement('div');
+                metricDiv.classList.add('p-3', 'rounded-md', 'bg-black/10', 'border', 'border-white/5');
+                metricDiv.innerHTML = `
+                    <div class="flex justify-between items-center text-gray-300">
+                        <span>${metric.date}</span>
+                        <div>
+                            <span class="mr-4">Revenue: <span class="text-white">$${metric.revenue}</span></span>
+                            <span class="mr-4">Visitors: <span class="text-white">${metric.visitors}</span></span>
+                            <span>Leads: <span class="text-white">${metric.leads}</span></span>
+                        </div>
+                    </div>
+                `;
+                metricsDataContainer.appendChild(metricDiv);
+            });
+        }
+
+        function getMetricsForDate(date) {
+            return mockMetrics.find(metric => metric.date === date);
+        }
+
+         function findCorrelations(entry, metrics) {
+            const foundMetrics = metrics.find(m => m.date === entry.date);
+            if (!foundMetrics) return[];
+
+            const correlations = [];
+            const numbers = entry.numbers.split(',').map(n => n.trim()).filter(n => n !== '');
+
+            numbers.forEach(numberStr => {
+                const number = parseInt(numberStr, 10);
+                if (!isNaN(number)) {
+                    if (foundMetrics.revenue === number) {
+                        correlations.push(`Revenue: ${number}`);
+                    }
+                    if (foundMetrics.visitors === number) {
+                        correlations.push(`Visitors: ${number}`);
+                    }
+                    if (foundMetrics.leads === number) {
+                        correlations.push(`Leads: ${number}`);
+                    }
+                }
+            });
+            return correlations;
+        }
+
+        // Affiliate Offer Functions
+        function suggestAffiliateOffer(entry) {
+            const keywords = ['abundance', 'manifestation', 'purpose', 'alignment', 'soul', 'spiritual', 'healing', 'meditation', 'astrology'];
+            const entryText = `${entry.numbers} ${entry.notes}`.toLowerCase();
+
+            for (const keyword of keywords) {
+                if (entryText.includes(keyword)) {
+                    const matchingOffers = mockAffiliateOffers.filter(offer => offer.category.toLowerCase().includes(keyword));
+                    if (matchingOffers.length > 0) {
+                         return matchingOffers[Math.floor(Math.random() * matchingOffers.length)];
+                    }
+                }
+            }
+            return null;
+        }
+
+        function displayAffiliateOffer(offer) {
+            const container = document.getElementById('affiliate-offer');
+            const message = document.getElementById('affiliate-message');
+
+            if (offer) {
+                container.classList.remove('text-gray-400', 'py-6', 'text-center');
+                container.innerHTML = `
+                    <div class="bg-gradient-to-br from-white/5 to-transparent p-4 rounded-lg border border-white/10 shadow-md flex flex-col md:flex-row items-center gap-4 slide-up">
+                        <img src="${offer.imageUrl}" alt="${offer.title}" class="w-full md:w-64 h-auto rounded-md object-cover">
+                        <div class="space-y-2 flex-1">
+                            <h3 class="text-xl font-semibold text-white">${offer.title}</h3>
+                            <p class="text-gray-300">${offer.description}</p>
+                            <a href="${offer.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-blue-400 hover:text-blue-300 hover:underline transition-colors">
+                                Learn More
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 ml-1">
+                                    <line x1="5" x2="19" y1="12" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.classList.add('text-gray-400', 'py-6', 'text-center');
+                container.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 mx-auto mb-2 text-gray-500">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <path d="M3 6h18"></path>
+                        <path d="M16 10a4 4 0 1 1-8 0"></path>
+                    </svg>
+                    <p id="affiliate-message">
+                        No specific offer suggested for your last entry. Record more entries to get personalized
+                        recommendations.
+                    </p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
